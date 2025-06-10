@@ -1,0 +1,179 @@
+{
+  "values": {
+    "dragonsurvival:cave_dragon": {
+      "neoforge:conditions": [
+        {
+          "type": "dragonsurvival:registered",
+          "registry": "dragonsurvival:dragon_species",
+          "value": "dragonsurvival:cave_dragon"
+        }
+      ],
+      "neoforge:value": [
+        {
+          "items": "farmersdelight:barbecue_stick",
+          "properties": {
+            "nutrition": 8,
+            "saturation": 7.2
+          }
+        },
+        {
+          "items": "farmersdelight:chocolate_pie_slice",
+          "properties": {
+            "eat_seconds": 0.8,
+            "effects": [
+              {
+                "effect": {
+                  "duration": 600,
+                  "id": "minecraft:speed",
+                  "neoforge:cures": [
+                    "milk",
+                    "protected_by_totem"
+                  ],
+                  "show_icon": false,
+                  "show_particles": false
+                }
+              }
+            ],
+            "nutrition": 3,
+            "saturation": 1.8000001
+          }
+        }
+      ]
+    },
+    "dragonsurvival:forest_dragon": {
+      "neoforge:conditions": [
+        {
+          "type": "dragonsurvival:registered",
+          "registry": "dragonsurvival:dragon_species",
+          "value": "dragonsurvival:forest_dragon"
+        }
+      ],
+      "neoforge:value": [
+        {
+          "items": "farmersdelight:sweet_berry_cheesecake_slice",
+          "properties": {
+            "eat_seconds": 0.8,
+            "effects": [
+              {
+                "effect": {
+                  "duration": 600,
+                  "id": "minecraft:speed",
+                  "neoforge:cures": [
+                    "milk",
+                    "protected_by_totem"
+                  ],
+                  "show_icon": false,
+                  "show_particles": false
+                }
+              }
+            ],
+            "nutrition": 3,
+            "saturation": 1.8000001
+          }
+        },
+        {
+          "items": "farmersdelight:cake_slice",
+          "properties": {
+            "eat_seconds": 0.8,
+            "effects": [
+              {
+                "effect": {
+                  "duration": 400,
+                  "id": "minecraft:speed",
+                  "neoforge:cures": [
+                    "milk",
+                    "protected_by_totem"
+                  ],
+                  "show_icon": false,
+                  "show_particles": false
+                }
+              }
+            ],
+            "nutrition": 2,
+            "saturation": 0.4
+          }
+        },
+        {
+          "items": "farmersdelight:chocolate_pie_slice",
+          "properties": {
+            "eat_seconds": 0.8,
+            "effects": [
+              {
+                "effect": {
+                  "duration": 600,
+                  "id": "minecraft:speed",
+                  "neoforge:cures": [
+                    "milk",
+                    "protected_by_totem"
+                  ],
+                  "show_icon": false,
+                  "show_particles": false
+                }
+              }
+            ],
+            "nutrition": 3,
+            "saturation": 1.8000001
+          }
+        },
+        {
+          "items": "farmersdelight:sweet_berry_cookie",
+          "properties": {
+            "eat_seconds": 0.8,
+            "nutrition": 2,
+            "saturation": 0.4
+          }
+        },
+        {
+          "items": "farmersdelight:honey_cookie",
+          "properties": {
+            "eat_seconds": 0.8,
+            "nutrition": 2,
+            "saturation": 0.4
+          }
+        },
+        {
+          "items": "farmersdelight:glow_berry_custard",
+          "properties": {
+            "can_always_eat": true,
+            "effects": [
+              {
+                "effect": {
+                  "duration": 100,
+                  "id": "minecraft:glowing",
+                  "neoforge:cures": [
+                    "milk",
+                    "protected_by_totem"
+                  ],
+                  "show_icon": true
+                }
+              }
+            ],
+            "nutrition": 3,
+            "saturation": 4.2000003
+          }
+        },
+        {
+          "items": "farmersdelight:nether_salad",
+          "properties": {
+            "effects": [
+              {
+                "effect": {
+                  "duration": 240,
+                  "id": "minecraft:nausea",
+                  "neoforge:cures": [
+                    "milk",
+                    "protected_by_totem"
+                  ],
+                  "show_icon": true
+                },
+                "probability": 0.3
+              }
+            ],
+            "nutrition": 5,
+            "saturation": 4.0
+          }
+        }
+      ]
+    }
+  }
+}
