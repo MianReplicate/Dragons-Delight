@@ -80,7 +80,7 @@ public class DD {
         }
 
         @Override
-        protected void gather() {
+        protected void gather(HolderLookup.Provider provider) {
             ResourceKey<DragonSpecies> TUNDRA = BuiltInDragonSpecies.key(DragonSurvival.res("tundra_dragon"));
             ResourceKey<DragonSpecies> AETHER = BuiltInDragonSpecies.key(DragonSurvival.res("aether_dragon"));
 
