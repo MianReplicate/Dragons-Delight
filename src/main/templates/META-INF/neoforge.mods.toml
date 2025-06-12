@@ -62,3 +62,27 @@ type = "required"
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "SERVER"
+
+[[dependencies."${mod_id}"]]
+modId = "dragonsurvival"
+type = "required"
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[2.0.28,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "geckolib"
+type = "required"
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[4.7.5.1,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "farmersdelight"
+type = "required"
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[1.2.8,)"
+ordering = "AFTER"
+side = "BOTH"
