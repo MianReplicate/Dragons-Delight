@@ -30,6 +30,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    flatDir{
+        dir "libs"
+    }
 }
 
 base {
@@ -134,6 +137,8 @@ dependencies {
     // implementation project(":myproject")
 
     runtimeOnly "curse.maven:sodium-394468:6382651" // just to make my game not so laggy
+    runtimeOnly "dragon:tundradragon-1.0.1-neoforge:1.21.1"
+    runtimeOnly "dragon:ds_aether_addon-1.1.0-neoforge:1.21.1"
 
     implementation "curse.maven:dragonsurvival-420799:6616264"
     implementation "curse.maven:geckolib-388172:6304958"

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "mian.minecraft.dragons_delight.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "DietEntryCacheMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
