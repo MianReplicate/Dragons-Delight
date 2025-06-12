@@ -4,19 +4,27 @@ import by.dragonsurvivalteam.dragonsurvival.DragonSurvival;
 import by.dragonsurvivalteam.dragonsurvival.common.codecs.DietEntry;
 import by.dragonsurvivalteam.dragonsurvival.registry.DSConditions;
 import by.dragonsurvivalteam.dragonsurvival.registry.DSDataMaps;
+import by.dragonsurvivalteam.dragonsurvival.registry.data_maps.DietEntryCache;
 import by.dragonsurvivalteam.dragonsurvival.registry.datagen.data_maps.RegisteredCondition;
 import by.dragonsurvivalteam.dragonsurvival.registry.dragon.BuiltInDragonSpecies;
 import by.dragonsurvivalteam.dragonsurvival.registry.dragon.DragonSpecies;
+import by.dragonsurvivalteam.dragonsurvival.util.ResourceHelper;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -83,7 +91,7 @@ public class DD {
         protected void gather(HolderLookup.Provider provider) {
             ResourceKey<DragonSpecies> TUNDRA = BuiltInDragonSpecies.key(DragonSurvival.res("tundra_dragon"));
             ResourceKey<DragonSpecies> AETHER = BuiltInDragonSpecies.key(DragonSurvival.res("aether_dragon"));
-
+            builder(DSDataMaps.DIET_ENTRIES);
             builder(DSDataMaps.DIET_ENTRIES)
                     .add(BuiltInDragonSpecies.CAVE_DRAGON, caveDiet(), false, DSConditions.CAVE_DRAGON_LOADED)
                     .add(BuiltInDragonSpecies.FOREST_DRAGON, forestDiet(), false, DSConditions.FOREST_DRAGON_LOADED)
@@ -131,6 +139,32 @@ public class DD {
             );
         }
 
+        public static List<Ingredient> getIngredientsFor(Item item){
+            RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
+            // should check for namespace & location
+            RecipeHolder holder = manager.getRecipes().stream().filter(recipe -> recipe.id()
+                    .equals(BuiltInRegistries.ITEM.getKey(item))).findFirst().orElseGet(null);
+            if(holder == null)
+                return null;
+
+            return holder.value().getIngredients();
+        }
+
+        public static DietEntry makeFoodEntryForDragon(Holder<DragonSpecies> dragonSpecies, Item item){
+            if(item.components().has(DataComponents.FOOD)){
+                List<Ingredient> ingredients = getIngredientsFor(item);
+                if(ingredients != null){
+                    DietEntryCache.getDietItems(dragonSpecies);
+                }
+            }
+        }
+
+        public static void makeFoodEntriesForDragons(HolderLookup.Provider provider){
+            ResourceHelper.all(provider, DragonSpecies.REGISTRY).forEach((species) -> {
+                BuiltInRegistries.ITEM.forEach(item -> makeFoodEntryForDragon(species, item));
+            });
+        }
+
         public static List<DietEntry> caveDiet(){
             return List.of(
                     makeEntryForFood(ModItems.BARBECUE_STICK, item ->
@@ -147,6 +181,10 @@ public class DD {
         }
 
         public static List<DietEntry> forestDiet(){
+            RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
+            manager.getRecipes().stream().filter(recipe -> recipe.id()
+                    .equals()).findFirst().get().value();
+
             return List.of(
                     makeEntryForFood(ModItems.SWEET_BERRY_CHEESECAKE_SLICE, item ->
                             createFood(FoodValues.PIE_SLICE)),
