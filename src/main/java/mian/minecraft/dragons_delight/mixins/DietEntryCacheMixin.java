@@ -32,7 +32,7 @@ public class DietEntryCacheMixin {
     @Inject(method = "getDiet", at = @At("HEAD"))
     private static void getDiet(Holder<DragonSpecies> species, Item item, CallbackInfoReturnable<FoodProperties> cir){
         Map<Item, FoodProperties> map = CACHE.get(species.getKey());
-        if(map.get(item) == null && item.components().has(DataComponents.FOOD)){
+        if(!map.containsKey(item) && item.components().has(DataComponents.FOOD)){
             DragonsDelight.makeFoodEntryBasedOnDiet(
                     ServerLifecycleHooks.getCurrentServer(),
                     map.keySet().stream().toList(),

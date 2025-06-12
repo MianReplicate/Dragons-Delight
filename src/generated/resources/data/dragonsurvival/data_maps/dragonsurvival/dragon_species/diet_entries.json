@@ -1,0 +1,73 @@
+{
+  "values": {
+    "dragonsurvival:cave_dragon": {
+      "neoforge:conditions": [
+        {
+          "type": "dragonsurvival:registered",
+          "registry": "dragonsurvival:dragon_species",
+          "value": "dragonsurvival:cave_dragon"
+        }
+      ],
+      "neoforge:value": [
+        {
+          "items": "#c:foods/cooked_meat"
+        },
+        {
+          "items": "#c:foods/cooked_fish"
+        },
+        {
+          "items": "#c:foods/cooked_egg"
+        },
+        {
+          "items": "#c:foods/cooked_bacon"
+        }
+      ]
+    },
+    "dragonsurvival:forest_dragon": {
+      "neoforge:conditions": [
+        {
+          "type": "dragonsurvival:registered",
+          "registry": "dragonsurvival:dragon_species",
+          "value": "dragonsurvival:cave_dragon"
+        }
+      ],
+      "neoforge:value": [
+        {
+          "items": "#c:foods/cooked_meat"
+        },
+        {
+          "items": "#c:foods/cooked_fish"
+        },
+        {
+          "items": "#c:foods/cooked_egg"
+        },
+        {
+          "items": "#c:foods/cooked_bacon"
+        }
+      ]
+    },
+    "dragonsurvival:sea_dragon": {
+      "neoforge:conditions": [
+        {
+          "type": "dragonsurvival:registered",
+          "registry": "dragonsurvival:dragon_species",
+          "value": "dragonsurvival:cave_dragon"
+        }
+      ],
+      "neoforge:value": [
+        {
+          "items": "#c:foods/cooked_meat"
+        },
+        {
+          "items": "#c:foods/cooked_fish"
+        },
+        {
+          "items": "#c:foods/cooked_egg"
+        },
+        {
+          "items": "#c:foods/cooked_bacon"
+        }
+      ]
+    }
+  }
+}
