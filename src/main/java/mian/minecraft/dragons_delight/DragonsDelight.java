@@ -5,6 +5,7 @@ import by.dragonsurvivalteam.dragonsurvival.registry.DSConditions;
 import by.dragonsurvivalteam.dragonsurvival.registry.DSDataMaps;
 import by.dragonsurvivalteam.dragonsurvival.registry.dragon.BuiltInDragonSpecies;
 import by.dragonsurvivalteam.dragonsurvival.registry.dragon.DragonSpecies;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -29,6 +30,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 // TODO: maybe do some datagen for some tags and items?
 // TODO: cant search up ur dragon to see its foods? (bug)
@@ -70,59 +72,35 @@ public class DragonsDelight {
         return recipeRef.get().value().getIngredients();
     }
 
-    public static Optional<DietEntry> makeFoodEntryBasedOnDiet(MinecraftServer server, List<Item> diet, Item item){
-        if(item.components().has(DataComponents.FOOD)){
+    public static Optional<DietEntry> makeFoodEntryBasedOnDiet(MinecraftServer server, List<Item> diet, Item foodItem){
+        if(foodItem.components().has(DataComponents.FOOD)){
+            FoodProperties foodProperties = foodItem.components().get(DataComponents.FOOD);
 
-            // remove later on when we figure out how to use datagen to exclude tags
-//            if(COOKED_STUFF.stream().anyMatch(tag -> item.getDefaultInstance().is(tag)))
-//                return Optional.empty();
-
-            FoodProperties foodProperties = item.components().get(DataComponents.FOOD);
-
-            List<Ingredient> ingredients = getIngredientsFor(server, item);
+            List<Ingredient> ingredients = getIngredientsFor(server, foodItem);
             if(ingredients != null){
-                List<Item> itemsInvolved = ingredients.stream()
-                        .flatMap(ingredient -> Arrays.stream(ingredient.getItems()))
-                        .map(ItemStack::getItem)
-                        .toList();
-//                itemsInvolved.removeAll(DragonsDelight.NOT_INCLUDED_IN_INGREDIENTS);
 
-                int max = itemsInvolved.size();
+                ArrayList<Pair<Integer, Float>> points = new ArrayList<>();
+                for(Ingredient ingredient: ingredients){
+                    List<ItemStack> items = Arrays.stream(ingredient.getItems())
+                            .filter(itemStack -> diet.contains(itemStack.getItem()) && itemStack.getComponents().get(DataComponents.FOOD) != null).toList();
 
-                if(max == 0)
-                    return Optional.empty(); // literally no ingredients involved
+                    int nutrition = items.stream().mapToInt(stack -> Objects.requireNonNull(stack.getComponents().get(DataComponents.FOOD)).nutrition()).sum();
+                    float saturation = items.stream().mapToLong(stack -> (long) Objects.requireNonNull(stack.getComponents().get(DataComponents.FOOD)).saturation()).sum();
 
-                int matching = Math.toIntExact(itemsInvolved.stream().filter(diet::contains).count());
+                    points.add(new Pair<>(nutrition, saturation));
 
-                if(matching == 0)
-                    return Optional.empty(); // literally no ingredients match
-
-//                int nutrition = (int) (foodProperties.nutrition() * ((float) matching / max));
-//                float saturation = foodProperties.saturation() * ((float) matching / max);
-
-//                boolean noNutrition = nutrition == 0;
-//                boolean noSaturation = saturation == 0;
-
-                int nutrition = 0;
-                float saturation = 0;
-
-                for(Item ingredient : itemsInvolved.stream().filter(diet::contains).toList()){
-                    FoodProperties properties = ingredient.components().get(DataComponents.FOOD);
-                    if(properties != null){
-//                        if(noNutrition)
-                            nutrition += properties.nutrition();
-//                        if(noSaturation)
-                            saturation += properties.saturation();
-                    }
+                    LOGGER.info(foodItem+ ": " + ingredient);
                 }
+                Optional<Pair<Integer, Float>> maxPair = points.stream().max(Comparator.comparingInt(Pair::getFirst));
+                Pair<Integer, Float> pair = maxPair.orElse(null);
 
-                if(nutrition <= 0)
-                    return Optional.empty(); // pointless
+                if(pair == null)
+                    return Optional.empty();
 
                 return Optional.of(
-                        DietEntry.from(item, new FoodProperties(
-                                nutrition,
-                                saturation,
+                        DietEntry.from(foodItem, new FoodProperties(
+                                pair.getFirst(),
+                                pair.getSecond(),
                                 foodProperties.canAlwaysEat(),
                                 foodProperties.eatSeconds(),
                                 foodProperties.usingConvertsTo(),
