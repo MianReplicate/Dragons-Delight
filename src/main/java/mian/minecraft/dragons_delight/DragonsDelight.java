@@ -31,31 +31,32 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 // TODO: maybe do some datagen for some tags and items?
+// TODO: cant search up ur dragon to see its foods? (bug)
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(DragonsDelight.MODID)
 public class DragonsDelight {
     // cooked stuff should be excluded from automatic inclusion
     // add support for diet entry remover, use datagen to exclude cooked meat for default dragons
-    public static final List<TagKey<Item>> COOKED_STUFF = List.of(
-            Tags.Items.FOODS_COOKED_MEAT,
-            Tags.Items.FOODS_COOKED_FISH,
-            tag("foods/cooked_egg"),
-            tag("foods/cooked_bacon")
-    );
+//    public static final List<TagKey<Item>> COOKED_STUFF = List.of(
+//            Tags.Items.FOODS_COOKED_MEAT,
+//            Tags.Items.FOODS_COOKED_FISH,
+//            tag("foods/cooked_egg"),
+//            tag("foods/cooked_bacon")
+//    );
 
     // should not be accounted for recipes, maybe convert to configuration?
-    public static final List<Item> NOT_INCLUDED_IN_INGREDIENTS = List.of(
-            Items.BOWL,
-            Items.MILK_BUCKET
-    );
+//    public static final List<Item> NOT_INCLUDED_IN_INGREDIENTS = List.of(
+//            Items.BOWL,
+//            Items.MILK_BUCKET
+//    );
 
     public static final String MODID = "dragons_delight";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public DragonsDelight(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("Time to delight your dragon with feasts upon feats!");
-        modEventBus.register(this);
+//        modEventBus.register(this);
     }
 
     public static List<Ingredient> getIngredientsFor(MinecraftServer server, Item item){
@@ -73,18 +74,18 @@ public class DragonsDelight {
         if(item.components().has(DataComponents.FOOD)){
 
             // remove later on when we figure out how to use datagen to exclude tags
-            if(COOKED_STUFF.stream().anyMatch(tag -> item.getDefaultInstance().is(tag)))
-                return Optional.empty();
+//            if(COOKED_STUFF.stream().anyMatch(tag -> item.getDefaultInstance().is(tag)))
+//                return Optional.empty();
 
             FoodProperties foodProperties = item.components().get(DataComponents.FOOD);
 
             List<Ingredient> ingredients = getIngredientsFor(server, item);
             if(ingredients != null){
-                List<Item> itemsInvolved = new ArrayList<>(ingredients.stream()
+                List<Item> itemsInvolved = ingredients.stream()
                         .flatMap(ingredient -> Arrays.stream(ingredient.getItems()))
                         .map(ItemStack::getItem)
-                        .toList());
-                itemsInvolved.removeAll(DragonsDelight.NOT_INCLUDED_IN_INGREDIENTS);
+                        .toList();
+//                itemsInvolved.removeAll(DragonsDelight.NOT_INCLUDED_IN_INGREDIENTS);
 
                 int max = itemsInvolved.size();
 
@@ -96,18 +97,21 @@ public class DragonsDelight {
                 if(matching == 0)
                     return Optional.empty(); // literally no ingredients match
 
-                int nutrition = (int) (foodProperties.nutrition() * ((float) matching / max));
-                float saturation = foodProperties.saturation() * ((float) matching / max);
+//                int nutrition = (int) (foodProperties.nutrition() * ((float) matching / max));
+//                float saturation = foodProperties.saturation() * ((float) matching / max);
 
-                boolean noNutrition = nutrition == 0;
-                boolean noSaturation = saturation == 0;
+//                boolean noNutrition = nutrition == 0;
+//                boolean noSaturation = saturation == 0;
+
+                int nutrition = 0;
+                float saturation = 0;
 
                 for(Item ingredient : itemsInvolved.stream().filter(diet::contains).toList()){
                     FoodProperties properties = ingredient.components().get(DataComponents.FOOD);
                     if(properties != null){
-                        if(noNutrition)
+//                        if(noNutrition)
                             nutrition += properties.nutrition();
-                        if(noSaturation)
+//                        if(noSaturation)
                             saturation += properties.saturation();
                     }
                 }
@@ -134,44 +138,44 @@ public class DragonsDelight {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
     }
 
-    @SubscribeEvent
-    public void registerDatapacks(GatherDataEvent event){
-        event.addProvider(new DietEntries(event.getGenerator().getPackOutput(), event.getLookupProvider()));
-    }
-
-    public static class DietEntries extends DataMapProvider {
-        protected DietEntries(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-            super(packOutput, lookupProvider);
-        }
-
-        @Override
-        protected void gather(HolderLookup.@NotNull Provider provider) {
-            Builder<List<DietEntry>, DragonSpecies> builder = builder(DSDataMaps.DIET_ENTRIES);
-            builder.add(
-                    BuiltInDragonSpecies.CAVE_DRAGON,
-                    COOKED_STUFF.stream().map(DietEntry::from).toList(),
-                    false,
-                    DSConditions.CAVE_DRAGON_LOADED
-            ).build();
-
-            builder.add(
-                    BuiltInDragonSpecies.FOREST_DRAGON,
-                    COOKED_STUFF.stream().map(DietEntry::from).toList(),
-                    false,
-                    DSConditions.FOREST_DRAGON_LOADED
-            ).build();
-
-            builder.add(
-                    BuiltInDragonSpecies.SEA_DRAGON,
-                    COOKED_STUFF.stream().map(DietEntry::from).toList(),
-                    false,
-                    DSConditions.SEA_DRAGON_LOADED
-            ).build();
-        }
-
-        @Override
-        public @NotNull String getName() {
-            return "Dragon's Delight Diet Entries";
-        }
-    }
+//    @SubscribeEvent
+//    public void registerDatapacks(GatherDataEvent event){
+//        event.addProvider(new DietEntries(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+//    }
+//
+//    public static class DietEntries extends DataMapProvider {
+//        protected DietEntries(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+//            super(packOutput, lookupProvider);
+//        }
+//
+//        @Override
+//        protected void gather(HolderLookup.@NotNull Provider provider) {
+//            Builder<List<DietEntry>, DragonSpecies> builder = builder(DSDataMaps.DIET_ENTRIES);
+//            builder.add(
+//                    BuiltInDragonSpecies.CAVE_DRAGON,
+//                    COOKED_STUFF.stream().map(DietEntry::from).toList(),
+//                    false,
+//                    DSConditions.CAVE_DRAGON_LOADED
+//            ).build();
+//
+//            builder.add(
+//                    BuiltInDragonSpecies.FOREST_DRAGON,
+//                    COOKED_STUFF.stream().map(DietEntry::from).toList(),
+//                    false,
+//                    DSConditions.FOREST_DRAGON_LOADED
+//            ).build();
+//
+//            builder.add(
+//                    BuiltInDragonSpecies.SEA_DRAGON,
+//                    COOKED_STUFF.stream().map(DietEntry::from).toList(),
+//                    false,
+//                    DSConditions.SEA_DRAGON_LOADED
+//            ).build();
+//        }
+//
+//        @Override
+//        public @NotNull String getName() {
+//            return "Dragon's Delight Diet Entries";
+//        }
+//    }
 }
